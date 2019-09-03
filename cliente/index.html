@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Gmail</title>
+    <meta charset="utf-8" />
+  </head>
+  <style>
+      #alias{
+          padding-right: 20px;
+          float: right;
+      }
+
+      #botones_email{
+          align-items: center;
+      }
+
+      .message{
+          text-align: right;
+          padding-right: 40px;
+      }
+      .message img{
+          float: right;
+      }
+      #signout_button{
+          vertical-align: middle;
+          margin-top: 25%;
+      }
+      #authorize_button{
+          vertical-align: middle;
+          margin-top: 25%;
+      }
+      #imagen_cargada{
+        width: 50px;
+        height: 50px;
+        border-radius: 100px;        
+        overflow: hidden;
+        margin:10px auto;
+	    display:block;
+      }
+
+      .bandeja{
+        margin: 5px;
+        padding: 5px;
+      }
+
+      tr:hover{
+        background-color: rgb(240, 240, 240);
+      }
+      
+  </style>
+  <link href="estilos.css" rel="stylesheet">
+  <link href="estilos_menu_lateral.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <!-- Bootstrap Core CSS -->
+  <link href="bootstrap.min.css" rel="stylesheet">
+
+  <!-- MetisMenu CSS -->
+  <link href="metisMenu.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link href="sb-admin-2.css" rel="stylesheet">
+
+  <!-- Custom Fonts -->
+  <!--
+    
+  <link href="font-awesome.min.css" rel="stylesheet" type="text/css">
+  -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <body>
+
+    <div id="login">
+        <form onsubmit="return addMessage(this)">
+                <div class="login-wrap">
+                    <div class="login-html">
+                        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
+                        <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab"></label>
+                        <div class="login-form">
+                            <div class="sign-in-htm">
+                                <div class="group">
+                                    <label for="user" class="label">Username</label>
+                                    <input id="user" type="text" class="input">
+                                </div>
+                                <div class="group">
+                                    <img id="imagen_cargada" src="user.png">
+                                    <label id="label_imagen" class="label">Imagen</label>
+                                    <input type="file" id="imagen" class="input" >
+                                </div>
+            
+                                <div class="group">
+                                    <input type="submit" class="button" value="Sign In" onclick="javascript:mostrar_Interfaz_Correo();">
+                                    <a id="enlace"></a>
+                                </div>
+                                <div class="hr"></div>
+            
+                            </div>
+            
+                        </div>
+                    </div>
+                </div>
+        </form>
+    </div>
+
+    <div id="validar_inicio">
+        <!--Add buttons to initiate auth sequence and sign out-->
+        <center>
+                <button id="authorize_button" class="btn btn-success" style="display: none;">Autorizar</button>
+                <button id="signout_button" class="btn btn-success" style="display: none;">Cerrar Sesión</button>        
+        </center>
+        
+        <pre id="content" style="white-space: pre-wrap;"></pre>
+    </div>
+    
+
+    <div id="correo" class="login-wrap2">
+            <div id="wrapper">
+                    <!-- Navigation -->
+                    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+                        <div class="navbar-header">
+                            <img src="email.png" style="background: brown; padding: 20px;   padding-left: 71px; padding-right: 71px;">
+                            <a class="btn btn-default" data-toggle="modal" data-target="#redactar_email" style="margin: 20px; margin-left: 43px; margin-right: 45px;  padding-left: 50px; padding-right: 50px; border-style: double;"> Redactar</a>
+                        </div>
+                        <!-- /.navbar-header -->
+                        
+                        <div id="mensajes"></div>
+            
+                        <div class="navbar-default sidebar" role="navigation">
+                            <div class="sidebar-nav navbar-collapse">
+                                <ul class="nav" id="side-menu">
+                                    
+                                    <li>
+                                        <a href="#" onclick="mostrar_Interfaz_Recibidos();"> Recibido</a>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="#" onclick="mostrar_Interfaz_Eliminados(); "> Eliminado</a>
+                                    </li>
+                                    
+                                    <li>
+                                        <a href="#" onclick="mostrar_Interfaz_Adjuntos(); "> Archivado</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- /.sidebar-collapse -->
+                        </div>
+                        <!-- /.navbar-static-side -->
+                    </nav>
+            
+                    <div id="page-wrapper">                     
+                        
+                        <div class="row" id="recibidos">
+                            <div class="col-lg-12">
+                                <div class="panel panel-default" style="margin-top: 20px;">
+                                    <div class="panel-heading" >
+                                        Principal 
+            
+                                    </div>
+                                    <!-- /.panel-heading -->
+                                    <div class="panel-body" id="area_email">
+                                        <table id="tabla" style="width:100%">
+
+                                        </table>
+                                    </div>
+                                    <!-- /.panel-body -->
+                                </div>
+                                <!-- /.panel -->
+                                                    
+                            </div>
+                            <!-- /.col-lg-8 -->                            
+                        </div>
+                        <!-- /.row -->
+
+                        <div class="row" id="adjuntos">
+                            <div class="col-lg-12">
+                                <div class="panel panel-default" style="margin-top: 20px;">
+                                    <div class="panel-heading" >
+                                        Archivados 
+            
+                                    </div>
+                                    <!-- /.panel-heading -->
+                                    <div class="panel-body" >
+                                        <table id="tabla_adjuntos" style="width:100%">
+
+                                        </table>
+                                    </div>
+                                    <!-- /.panel-body -->
+                                </div>
+                                <!-- /.panel -->
+                                                    
+                            </div>
+                            <!-- /.col-lg-8 -->                            
+                        </div>
+
+                        <div class="row" id="eliminados">
+                                <div class="col-lg-12">
+                                    <div class="panel panel-default" style="margin-top: 20px;">
+                                        <div class="panel-heading" >
+                                            Eliminados 
+                
+                                        </div>
+                                        <!-- /.panel-heading -->
+                                        <div class="panel-body" >
+                                            <table id="tabla_eliminados" style="width:100%">
+    
+                                            </table>
+                                        </div>
+                                        <!-- /.panel-body -->
+                                    </div>
+                                    <!-- /.panel -->
+                                                        
+                                </div>
+                                <!-- /.col-lg-8 -->                            
+                            </div>
+                    </div>
+                    <!-- /#page-wrapper -->
+                </div>        
+
+        <!-- Modal -->
+        <div class="modal fade" id="redactar_email" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <form onsubmit="return addEmail(this)">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Nuevo mensaje</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                                
+                            <p>
+                                <label>Destinatario</label>
+                                <input type="text" id="email" class="form-control">
+                            </p>
+        
+                            <p>
+                                <label>Asunto</label>
+                                <input type="text" id="asunto" class="form-control">
+                            </p>
+        
+                            <p>
+                                <label>Mensaje</label>
+                                <textarea id="text" placeholder="Mensaje" class="form-control"></textarea>
+                            </p>      
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input type="submit" value="Enviar" class="btn btn-success">
+                        </div>
+                    </form>    
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <script>
+
+        $(document).on('click', '.borrar', function (event) {
+            event.preventDefault();
+            $(this).closest('tr').remove();
+        });
+        
+        document.getElementById('imagen').onchange = function () {
+            document.getElementById('imagen_cargada').src = document.getElementById('imagen').files[0].name;
+        }
+
+        var elemento = document.getElementById('correo');
+        elemento.style.display = 'none';
+
+        var elemento = document.getElementById('eliminados');
+        elemento.style.display = 'none';
+
+        elemento = document.getElementById('validar_inicio');
+        elemento.style.display = 'none';
+
+        div = document.getElementById('adjuntos');
+        div.style.display = 'none';
+
+        function mostrar_Boton_Autorizacion() {
+            div = document.getElementById('validar_inicio');
+            div.style.display = 'block';
+
+            var elemento = document.getElementById('login');
+            elemento.style.display = 'none';
+        }
+
+        function mostrar_Interfaz_Correo() {
+            div = document.getElementById('correo');//mostrar div
+            div.style.display = 'block';
+            
+            var elemento = document.getElementById('validar_inicio');//ocultar div
+            elemento.style.display = 'none';
+
+            elemento = document.getElementById('login');
+            elemento.style.display = 'none';
+        }
+
+        function mostrar_Interfaz_Adjuntos() {
+            div = document.getElementById('adjuntos');
+            div.style.display = 'block';
+
+            div = document.getElementById('recibidos');
+            div.style.display = 'none';
+
+            div = document.getElementById('eliminados');
+            div.style.display = 'none';
+            
+            var elemento = document.getElementById('validar_inicio');
+            elemento.style.display = 'none';
+
+            elemento = document.getElementById('login');
+            elemento.style.display = 'none';
+        }
+
+        function mostrar_Interfaz_Recibidos() {
+            div = document.getElementById('recibidos');
+            div.style.display = 'block';
+
+            div = document.getElementById('eliminados');
+            div.style.display = 'none';
+
+            div = document.getElementById('adjuntos');
+            div.style.display = 'none';
+            
+            elemento = document.getElementById('validar_inicio');
+            elemento.style.display = 'none';
+
+            elemento = document.getElementById('login');
+            elemento.style.display = 'none';
+        }
+
+        //
+        function mostrar_Interfaz_Eliminados() {
+            div = document.getElementById('eliminados');
+            div.style.display = 'block';
+
+            div = document.getElementById('recibidos');
+            div.style.display = 'none';
+
+            div = document.getElementById('adjuntos');
+            div.style.display = 'none';
+            
+            var elemento = document.getElementById('validar_inicio');
+            elemento.style.display = 'none';
+
+            elemento = document.getElementById('login');
+            elemento.style.display = 'none';
+        }
+    </script>
+
+
+    <script src="socket.io/socket.io.js"></script>
+    <script src="main.js"></script>
+
+    <!-- jQuery -->
+    <script src="jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="sb-admin-2.js"></script>
+
+  </body>
+</html>
