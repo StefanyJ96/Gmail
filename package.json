@@ -16,7 +16,7 @@
     "googleapis": "^39.2.0",
     "gulp": "^4.0.2",
     "nodemailer": "^4.7.0",
-    "socket.io": "^2.2.0"
+    "socket.io": "^2.4.0"
   },
   "keywords": [],
   "description": ""
